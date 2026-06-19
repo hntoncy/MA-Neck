@@ -1,0 +1,46 @@
+# YOLOv5n with MA-Neck.
+# Insert this file into a YOLOv5-style repository after adding the modules
+# from ma_neck/modules.py to models/common.py and parse_model support.
+
+nc: 80
+depth_multiple: 0.33
+width_multiple: 0.25
+anchors:
+  - [10,13, 16,30, 33,23]
+  - [30,61, 62,45, 59,119]
+  - [116,90, 156,198, 373,326]
+
+backbone:
+  [[-1, 1, Conv, [64, 6, 2, 2]],
+   [-1, 1, Conv, [128, 3, 2]],
+   [-1, 3, C3, [128]],
+   [-1, 1, Conv, [256, 3, 2]],
+   [-1, 6, C3, [256]],
+   [-1, 1, Conv, [512, 3, 2]],
+   [-1, 9, C3, [512]],
+   [-1, 1, Conv, [1024, 3, 2]],
+   [-1, 3, C3, [1024]],
+   [-1, 1, SPPF, [1024, 5]]]
+
+head:
+  [[-1, 1, SAE, [256]],
+   [-1, 1, Conv, [512, 1, 1]],
+   [-1, 1, nn.Upsample, [None, 2, 'nearest']],
+   [[-1, 6], 1, MSACA, [128]],
+   [-1, 3, C3, [512, False]],
+
+   [-1, 1, SAE, [128]],
+   [-1, 1, Conv, [256, 1, 1]],
+   [-1, 1, nn.Upsample, [None, 2, 'nearest']],
+   [[-1, 4], 1, MSACA, [64]],
+   [-1, 3, C3, [256, False]],
+
+   [-1, 1, Conv, [256, 3, 2]],
+   [[-1, 16], 1, MSACA, [64]],
+   [-1, 3, C3, [512, False]],
+
+   [-1, 1, Conv, [512, 3, 2]],
+   [[-1, 11], 1, MSACA, [128]],
+   [-1, 3, C3, [1024, False]],
+
+   [[19, 22, 25], 1, Detect, [nc, anchors]]]

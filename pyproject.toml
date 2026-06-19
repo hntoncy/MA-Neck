@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ma-neck"
+version = "0.1.0"
+description = "MA-Neck: Mutual attention-based feature enhancement for lightweight object detection."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "GPL-3.0-or-later" }
+dependencies = [
+    "torch>=1.7.0",
+    "torchvision>=0.8.1",
+    "numpy>=1.18.5",
+    "opencv-python>=4.1.1",
+    "PyYAML>=5.3.1",
+    "tqdm>=4.64.0"
+]
